@@ -6,6 +6,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
+    command: sh -c "npx prisma migrate dev && npm run seed && npm run start"
+    depends_on:
+      - db
     # volumes:
     #   - ./api:/app
   app:
@@ -14,8 +17,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 4200:4200
-    # volumes:
-    #   - ./app:/app
+  # volumes:
+  #   - ./app:/app
 
   db:
     image: postgres
@@ -24,7 +27,7 @@ services:
       POSTGRES_USER: fazenda
       POSTGRES_PASSWORD: fazenda
       POSTGRES_DB: test
-    volumes:
-      - ./data:/var/lib/postgresql/data
+    # volumes:
+    #   - ./data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
