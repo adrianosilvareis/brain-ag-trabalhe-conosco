@@ -1,0 +1,30 @@
+version: "3"
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    # volumes:
+    #   - ./api:/app
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - 4200:4200
+    # volumes:
+    #   - ./app:/app
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: fazenda
+      POSTGRES_PASSWORD: fazenda
+      POSTGRES_DB: test
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
