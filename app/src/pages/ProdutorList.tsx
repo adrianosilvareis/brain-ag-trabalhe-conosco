@@ -28,10 +28,6 @@ function ProdutorList() {
         Adicionar Produtor
       </Link>
 
-      <Link to="/" className="mt-6 ml-2 rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-        Dashboard
-      </Link>
-
       <table className="min-w-full">
         <thead>
           <tr>

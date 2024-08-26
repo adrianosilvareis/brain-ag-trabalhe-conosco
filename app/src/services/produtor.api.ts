@@ -66,3 +66,13 @@ export const excluirProdutor = async (id: number) => {
     return [];
   }
 };
+
+export const loadRelatorioDashboard = async () => {
+  try {
+    const response = await api.get("/relatorio");
+    return response.data;
+  } catch (error: any) {
+    console.log("Error fetching produtor: ", error.message);
+    return [];
+  }
+};

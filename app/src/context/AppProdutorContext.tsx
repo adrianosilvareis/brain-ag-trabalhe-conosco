@@ -1,15 +1,26 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { Produtor } from "../interfaces/produtor";
-import { createProdutor, excluirProdutor, getAllProdutores, getProdutorById, listarProdutores, updateProdutor } from "../services/produtor.api";
+import { Relatorio } from "../interfaces/relatorio";
+import {
+  createProdutor,
+  excluirProdutor,
+  getAllProdutores,
+  getProdutorById,
+  listarProdutores,
+  loadRelatorioDashboard,
+  updateProdutor
+} from "../services/produtor.api";
 
 type AppContextType = {
   produtores: Produtor[];
   produtor: Produtor | null;
+  relatorio: Relatorio | null;
   onGetProdutor: (id: number) => void,
   onUpdateProdutor: (id: number, body: Partial<Produtor>) => void,
   onCreateProdutor: (body: Partial<Produtor>) => void,
   onFetchProdutores: () => void,
-  onDeleteProdutor: (id: number) => void
+  onDeleteProdutor: (id: number) => void,
+  onDashboardLoad: () => void
 };
 
 export const AppProdutorContext = createContext({} as AppContextType);
@@ -17,6 +28,7 @@ export const AppProdutorContext = createContext({} as AppContextType);
 export function AppProdutorProvider({ children }: { children: React.ReactNode }) {
   const [produtores, setProdutores] = useState<Produtor[]>([]);
   const [produtor, setProdutor] = useState<Produtor | null>(null);
+  const [relatorio, setDashboard] = useState<Relatorio | null>(null);
 
   useEffect(() => {
     const fetchCultura = async () => {
@@ -52,15 +64,22 @@ export function AppProdutorProvider({ children }: { children: React.ReactNode })
     onFetchProdutores()
   }, [onFetchProdutores]);
 
+  const onDashboardLoad = useCallback(async () => {
+    const data = await loadRelatorioDashboard();
+    setDashboard(data)
+  }, [setDashboard]);
+
   return (
     <AppProdutorContext.Provider value={{
       produtores: produtores,
       produtor: produtor,
+      relatorio: relatorio,
       onGetProdutor: onGetProdutor,
       onUpdateProdutor: onUpdateProdutor,
       onCreateProdutor: onCreateProdutor,
       onFetchProdutores: onFetchProdutores,
-      onDeleteProdutor: onDeleteProdutor
+      onDeleteProdutor: onDeleteProdutor,
+      onDashboardLoad: onDashboardLoad
     }}>{children}</AppProdutorContext.Provider>
   );
 }
