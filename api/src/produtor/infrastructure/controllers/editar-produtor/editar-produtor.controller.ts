@@ -24,10 +24,9 @@ export class EditarProdutorController extends Controller<EditProps> {
         message: produtor
       };
     } catch (error) {
-      console.log(error);
       return {
         status: 500,
-        message: "Erro ao criar produtor"
+        message: "Erro ao editar produtor"
       };
     }
   }

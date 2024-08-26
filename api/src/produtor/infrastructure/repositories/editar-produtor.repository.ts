@@ -20,15 +20,17 @@ export class EditarProdutorRepository implements EditarProdutorUseCase {
     if (culturas?.length) {
       await this.prisma.culturasOnProdutor.deleteMany({
         where: {
-          produtorId: id
+          produtorId: Number(id)
         }
       });
       await this.prisma.culturasOnProdutor.createMany({
-        data: culturas.map((cultura) => ({
-          culturaId: cultura.idCultura,
-          areaCultura: cultura.areaCultura,
-          produtorId: id
-        }))
+        data: culturas.map((cultura) => {
+          return {
+            culturaId: Number(cultura.culturaId),
+            areaCultura: Number(cultura.areaCultura),
+            produtorId: Number(id)
+          };
+        })
       });
     }
     const produtorAtualizado = await this.prisma.produtor.update({

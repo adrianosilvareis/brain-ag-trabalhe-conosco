@@ -1,5 +1,5 @@
 export interface AddProdutorCulturaProps {
-  idCultura: number;
+  culturaId: number;
   areaCultura: number;
 }
 

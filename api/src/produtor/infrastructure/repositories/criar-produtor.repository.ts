@@ -26,9 +26,9 @@ export class CriarProdutorRepository implements CriarProdutorUseCase {
 
     await this.prisma.culturasOnProdutor.createMany({
       data: produtor.culturas.map((cultura) => ({
-        produtorId: createdProdutor.id,
-        culturaId: cultura.idCultura,
-        areaCultura: cultura.areaCultura
+        produtorId: Number(createdProdutor.id),
+        culturaId: Number(cultura.culturaId),
+        areaCultura: Number(cultura.areaCultura)
       }))
     });
   }
