@@ -5,18 +5,18 @@ services:
       context: ./api
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 5000:5000
     command: sh -c "npx prisma migrate dev && npm run seed && npm run start"
     depends_on:
       - db
     # volumes:
     #   - ./api:/app
-  app:
-    build:
-      context: ./app
-      dockerfile: Dockerfile
-    ports:
-      - 4200:4200
+  # app:
+  #   build:
+  #     context: ./app
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 3000:3000
   # volumes:
   #   - ./app:/app
 
