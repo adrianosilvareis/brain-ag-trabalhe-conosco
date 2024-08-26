@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client';
 import { AppCulturaProvider } from './context/AppCulturaContext';
 import { AppProdutorProvider } from './context/AppProdutorContext';
 import './index.css';
-import ProdutoPage from './pages/ProdutorPage';
+import ProdutorList from './pages/ProdutorList';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <AppProdutorProvider>
     <AppCulturaProvider>
-      <ProdutoPage />
+      <ProdutorList />
     </AppCulturaProvider>
   </AppProdutorProvider>
 );

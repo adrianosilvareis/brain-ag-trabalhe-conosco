@@ -36,3 +36,23 @@ export const updateProdutor = async (id: number, body: Partial<Produtor>) => {
     return [];
   }
 };
+
+export const getAllProdutores = async () => {
+  try {
+    const response = await api.get("/");
+    return response.data;
+  } catch (error: any) {
+    console.log("Error fetching produtor: ", error.message);
+    return [];
+  }
+};
+
+export const excluirProdutor = async (id: number) => {
+  try {
+    const response = await api.delete(`/${id}`);
+    return response.data;
+  } catch (error: any) {
+    console.log("Error fetching produtor: ", error.message);
+    return [];
+  }
+};

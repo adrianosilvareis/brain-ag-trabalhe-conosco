@@ -1,12 +1,14 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { Produtor } from "../interfaces/produtor";
-import { getProdutorById, listarProdutores, updateProdutor } from "../services/produtor.api";
+import { excluirProdutor, getAllProdutores, getProdutorById, listarProdutores, updateProdutor } from "../services/produtor.api";
 
 type AppContextType = {
   produtores: Produtor[];
   produtor: Produtor | null;
   onGetProdutor: (id: number) => void,
-  onUpdateProdutor: (id: number, body: Partial<Produtor>) => void
+  onUpdateProdutor: (id: number, body: Partial<Produtor>) => void,
+  onFetchProdutores: () => void,
+  onDeleteProdutor: (id: number) => void
 };
 
 export const AppProdutorContext = createContext({} as AppContextType);
@@ -34,12 +36,24 @@ export function AppProdutorProvider({ children }: { children: React.ReactNode })
     setProdutor(data);
   }, []);
 
+  const onFetchProdutores = useCallback(async () => {
+    const data = await getAllProdutores();
+    setProdutores(data);
+  }, []);
+
+  const onDeleteProdutor = useCallback(async (id: number) => {
+    await excluirProdutor(id);
+    onFetchProdutores()
+  }, [onFetchProdutores]);
+
   return (
     <AppProdutorContext.Provider value={{
       produtores: produtores,
       produtor: produtor,
       onGetProdutor: onGetProdutor,
-      onUpdateProdutor: onUpdateProdutor
+      onUpdateProdutor: onUpdateProdutor,
+      onFetchProdutores: onFetchProdutores,
+      onDeleteProdutor: onDeleteProdutor
     }}>{children}</AppProdutorContext.Provider>
   );
 }
