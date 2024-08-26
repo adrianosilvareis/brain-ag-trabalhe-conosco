@@ -50,3 +50,7 @@ O mesmo consiste em um cadastro de produtor rural com os seguintes dados:
 
 - O desenvolvedor full-stack deve realizar ambos, e concluir a integração.
   > Não envie a solução como anexo, suba os fontes para seu Github (ou outro repositório) e envie o link para o avaliador.
+
+
+  A solução esta rodando dentro de um container Docker, para executar basta rodar o comando
+  `docker-compose up -d` apos o container subir você pode acessar a aplicação no endereço `http://localhost:3000`
