@@ -1,6 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { cnpj, cpf } from 'cpf-cnpj-validator';
+import { useEffect } from 'react';
 import { useForm } from "react-hook-form";
+import { Link } from 'react-router-dom';
 import { z } from "zod";
 
 const produtorSchema = z.object({
@@ -32,7 +34,7 @@ const produtorSchema = z.object({
 export type Produtor = z.infer<typeof produtorSchema>;
 
 type ProdutorFormProps = {
-  produtor?: Partial<Produtor>,
+  produtor?: Partial<Produtor> | null,
   handleProdutor: (data: Produtor) => void
 }
 function ProdutorForm({ produtor, handleProdutor }: ProdutorFormProps) {
@@ -44,17 +46,23 @@ function ProdutorForm({ produtor, handleProdutor }: ProdutorFormProps) {
     setError,
     clearErrors,
     setValue,
-    getValues
+    getValues,
+    reset
   } = useForm<Produtor>({
     resolver: zodResolver(produtorSchema),
-    defaultValues: {
-      ...produtor
-    }
   });
+
+  useEffect(() => {
+    if (produtor) {
+      reset(produtor);
+    }
+  }, [reset, produtor]);
 
   function checkCpfCnpj(e: any) {
     const value = e.target.value.replace(/[^0-9]/g, '')
-    if (value.length === 11 && cpf.isValid(value) || value.length === 14 && cnpj.isValid(value)) {
+    const isValidCpf = value.length === 11 && cpf.isValid(value);
+    const isValidCnpj = value.length === 14 && cnpj.isValid(value);
+    if (isValidCpf || isValidCnpj) {
       clearErrors('cpfCnpj')
     } else {
       setError("cpfCnpj", { message: 'Cpf ou Cpnj Inválido' })
@@ -69,6 +77,9 @@ function ProdutorForm({ produtor, handleProdutor }: ProdutorFormProps) {
     <form onSubmit={handleSubmit(handleProdutor)} className="p-5 border-b border-gray-900/10 pb-12">
       <h1 className="text-base font-semibold leading-7 text-gray-900">Produtor</h1>
       <button type="submit" className="mt-6 rounded-md bg-blue-200 px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">SAVE</button>
+      <Link to="/list" className="mt-6 ml-2 rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+        Voltar
+      </Link>
       <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
         <div className="sm:col-span-3">
           <label className="block text-sm font-medium leading-6 text-gray-900">Nome do Produtor</label>

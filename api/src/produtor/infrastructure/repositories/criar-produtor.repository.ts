@@ -11,8 +11,18 @@ export class CriarProdutorRepository implements CriarProdutorUseCase {
   }
 
   async criarProdutor(produtor: AddProdutorProps): Promise<void> {
-    const createdProdutor = await this.prisma.produtor.create({
+    const maxIdResult = await this.prisma.produtor.findFirst({
+      orderBy: {
+        id: "desc"
+      },
+      select: {
+        id: true
+      }
+    });
+    const newId = maxIdResult ? maxIdResult.id + 1 : 1;
+    await this.prisma.produtor.create({
       data: {
+        id: newId,
         nomeProdutor: produtor.nomeProdutor,
         nomeFazenda: produtor.nomeFazenda,
         estado: produtor.estado,
@@ -24,12 +34,14 @@ export class CriarProdutorRepository implements CriarProdutorUseCase {
       }
     });
 
-    await this.prisma.culturasOnProdutor.createMany({
-      data: produtor.culturas.map((cultura) => ({
-        produtorId: Number(createdProdutor.id),
-        culturaId: Number(cultura.culturaId),
-        areaCultura: Number(cultura.areaCultura)
-      }))
-    });
+    if (produtor && produtor.culturas?.length > 0) {
+      await this.prisma.culturasOnProdutor.createMany({
+        data: produtor.culturas.map((cultura) => ({
+          produtorId: Number(newId),
+          culturaId: Number(cultura.culturaId),
+          areaCultura: Number(cultura.areaCultura)
+        }))
+      });
+    }
   }
 }

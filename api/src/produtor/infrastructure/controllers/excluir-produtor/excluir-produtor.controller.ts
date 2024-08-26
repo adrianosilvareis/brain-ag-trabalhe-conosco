@@ -17,6 +17,7 @@ export class ExcluirProdutorController extends Controller<{ id: number }> {
         message: "Produtor excluído com sucesso"
       };
     } catch (error) {
+      console.log(error);
       return {
         status: 500,
         message: "Erro ao excluir produtor"

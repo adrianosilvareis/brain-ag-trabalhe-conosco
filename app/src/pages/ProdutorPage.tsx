@@ -1,22 +1,32 @@
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ListarCultura from "../components/ListarCultura";
 import ProdutorForm, { Produtor as ProdutorFormulario } from "../components/ProdutorForm";
 import { useProdutorContext } from "../hooks/useProdutorContext";
 import { Culturas } from "../interfaces/culturas";
 import { Produtor } from "../interfaces/produtor";
 
-function ProdutoPage() {
+function ProdutorPage() {
+  const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const isNew = location.pathname === '/new';
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState<boolean>(true);
   const [culturasProdutor, setCulturasProdutor] = useState<Culturas[]>([]);
   const [formData, setFormData] = useState<Partial<Produtor> | null>(null);
 
-  const { onGetProdutor, produtor, onUpdateProdutor } = useProdutorContext();
+  const { onGetProdutor, produtor, onUpdateProdutor, onCreateProdutor, onFetchProdutores } = useProdutorContext();
 
   useEffect(() => {
-    if (!produtor) {
-      onGetProdutor(1);
+    if (isNew) {
+      setLoading(false);
+      return;
     }
-    if (loading && produtor !== null) {
+    if (!produtor || produtor?.id !== Number(id)) {
+      onGetProdutor(Number(id));
+    }
+    if (loading && produtor !== null && produtor?.id === Number(id)) {
       setCulturasProdutor(produtor?.culturas ?? []);
       setFormData({
         ...produtor,
@@ -24,7 +34,7 @@ function ProdutoPage() {
       });
       setLoading(false);
     }
-  }, [onGetProdutor, loading, produtor]);
+  }, [onGetProdutor, loading, produtor, id, isNew]);
 
   const onAddCultura = (props: Culturas) => {
     const culturas = [...culturasProdutor, props];
@@ -50,12 +60,15 @@ function ProdutoPage() {
     };
 
     setFormData(updated)
+    if (isNew) {
+      onCreateProdutor(updated);
+      setTimeout(() => {
+        onFetchProdutores();
+      }, 500);
+      navigate('/list')
+      return;
+    }
     onUpdateProdutor((formData?.id as number), updated as Partial<Produtor>);
-  }
-
-
-  if (formData === null) {
-    return <div>Carregando...</div>
   }
 
   return (
@@ -67,4 +80,4 @@ function ProdutoPage() {
   )
 }
 
-export default ProdutoPage;
+export default ProdutorPage;

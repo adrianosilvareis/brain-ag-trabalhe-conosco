@@ -37,6 +37,16 @@ export const updateProdutor = async (id: number, body: Partial<Produtor>) => {
   }
 };
 
+export const createProdutor = async (body: Partial<Produtor>) => {
+  try {
+    const response = await api.post("/", body);
+    return response.data;
+  } catch (error: any) {
+    console.log("Error fetching produtor: ", error.message);
+    return [];
+  }
+};
+
 export const getAllProdutores = async () => {
   try {
     const response = await api.get("/");

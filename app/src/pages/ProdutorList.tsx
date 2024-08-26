@@ -1,8 +1,10 @@
 import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useProdutorContext } from "../hooks/useProdutorContext";
 
 function ProdutorList() {
   const { onFetchProdutores, produtores, onDeleteProdutor } = useProdutorContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (produtores.length === 0) {
@@ -10,12 +12,8 @@ function ProdutorList() {
     }
   }, [onFetchProdutores, produtores]);
 
-  function novo() {
-
-  }
-
   function editar(id: number) {
-
+    navigate(`/${id}`)
   }
 
   function excluir(id: number) {
@@ -26,7 +24,13 @@ function ProdutorList() {
     <div className="p-5">
 
       <h1 className="col-span-3 text-base font-semibold leading-7 text-gray-900">Produtores</h1>
-      <button onClick={novo} className="m-1 rounded-md bg-blue-200 px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Adicionar Produtor</button>
+      <Link to="/new" className="m-1 rounded-md bg-blue-200 px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+        Adicionar Produtor
+      </Link>
+
+      <Link to="/" className="mt-6 ml-2 rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+        Dashboard
+      </Link>
 
       <table className="min-w-full">
         <thead>

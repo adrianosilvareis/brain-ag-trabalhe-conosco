@@ -15,6 +15,7 @@ export class RelatorioProdutoresController extends Controller {
         message: relatorio
       };
     } catch (error) {
+      console.log(error);
       return {
         status: 500,
         message: "Erro ao listar produtores"

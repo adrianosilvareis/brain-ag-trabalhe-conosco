@@ -11,13 +11,14 @@ export class CriarProdutorController extends Controller<AddProdutorProps> {
     body: AddProdutorProps
   ): Promise<{ status: number; message: unknown }> {
     try {
-      const produtor = await this.criarProdutor.criarProdutor(body);
+      await this.criarProdutor.criarProdutor(body);
 
       return {
         status: 201,
         message: "Produtor criado com sucesso"
       };
     } catch (error) {
+      console.log(error);
       return {
         status: 500,
         message: "Erro ao criar produtor"

@@ -17,6 +17,7 @@ export class GetProdutorController extends Controller<{ id: number }> {
         message: produtor
       };
     } catch (error) {
+      console.log(error);
       return {
         status: 500,
         message: "Erro ao retornar produtor"
